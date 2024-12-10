@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        *{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, sans-serif; 
+}
+body{
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-sizing: border-box;
+    background: #000;
+}
+.container{
+    width: 310px;
+    min-height: 400px;
+    background: rgb(255, 255, 255);
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 19px;
+}
+.search_con{
+    width: 100%;
+}
+.search_con input{
+    width: 78%;
+    height: 30px;
+    padding: 5px;
+    font-weight: 900;
+    border: none;
+    border-radius: 5px;
+    outline: none;
+    background: rgb(200, 227, 244);
+}
+.search_btn{
+    width: 30px;
+    height: 30px;
+    font-weight: 900;
+    font-size: 12px;
+    background: rgb(200, 227, 244);
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    outline: none;
+}
+.img_container{
+    width: 150px;
+    height: 150px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0);
+}
+.img_container img{
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+}
+.status{
+    width: 100%;
+    background: rgba(171, 36, 36, 0);
+    text-align: center;
+}
+.temperature{
+    font-size: 20px;
+    font-weight: 900;
+}
+.city,.country{
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.footer{
+    background: rgba(8, 8, 100, 0);
+    width: 100%;
+    margin-top: 0px;
+    display: flex;
+    justify-content: space-between;
+}
+.hw{
+    width: 120px;
+    height: 80px;
+    display: flex;
+    background: rgb(200, 227, 244);
+    border-radius: 10px;
+}
+.hw .humi_logo,.wind_logo{
+    width: 50px;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 34px;
+}
+.hw .humi_content,.wind_content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="search_con">
+            <input type="text"  class="input"/>
+            <button class="search_btn" onclick="data()">
+                <i class="bi bi-search"></i>
+            </button>
+        </div>
+        <div class="img_container">
+            <img src="https://openweathermap.org/img/wn/11n@4x.png" alt="" >
+        </div>
+        <div class="status">
+            <div class="temperature">0℃</div>
+            <div class="city">trichy</div>
+            <div class="country">rainny clouds</div>
+        </div>
+        <div class="footer">
+        <div class="hw">
+            <div class="humi_logo">
+                <i class="bi bi-droplet-fill"></i>
+            </div>
+            <div class="humi_content">
+                <p class="humi_percent">0%</p>
+                <p class="humi_word">Humidity</p>
+            </div>
+        </div>
+        <div class="hw">
+            <div class="wind_logo"> 
+                <i class="bi bi-wind"></i>
+            </div>
+            <div class="wind_content">
+                <p class="wind_percent">0%</p>
+                <p class="wind_word">Wind</p>
+            </div>
+        </div>
+        </div>
+    </div>
+    <script>
+        const data = async()=>{
+            let inpu = document.querySelector('.input')
+            let cityname = inpu.value;
+            let api = 'https://api.openweathermap.org/data/2.5/weather?q='+cityname+'&appid=e6a1efde231c3128e302f2c3d51f8293&units=metric';
+            let fetchh =await fetch(api);
+            let convert =await fetchh.json();
+
+            let temperature = document.querySelector('.temperature')
+                let city = document.querySelector('.city')
+                let country = document.querySelector('.country')
+                let img = document.querySelector('.img_container img')
+                let humi_percent = document.querySelector('.humi_percent')
+                let wind_percent = document.querySelector('.wind_percent')
+
+                temperature.innerHTML =convert.main.temp + '℃';
+                city.innerHTML = convert.name;
+                country.innerHTML =convert.weather[0].description;
+                img.src  = `https://openweathermap.org/img/wn/${convert.weather[0].icon}@4x.png`;
+                humi_percent.innerHTML = convert.main.humidity 
+                wind_percent.innerHTML = convert.wind.speed + " %"
+         
+        }
+        window.addEventListener('keyup',(e)=>{
+            if(e.key == 'Enter'){
+                data()
+            }            
+        })
+    </script>
+</body>
+</html>
